@@ -20,9 +20,6 @@ export const getBuildInput = async (): Promise<CreateBuildInput> => {
 
   // Get github context data
   const context = github.context;
-  console.log(
-    `We can even get context data, like the repo: ${context.repo.repo}`
-  );
 
   const repoName = context.repo.repo;
   const repoOwner = context.repo.owner;

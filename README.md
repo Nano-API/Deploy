@@ -31,4 +31,4 @@ jobs:
 
 ### `api_key`
 
-**Required** The Nano API key to use for authentication. To get this, visit the [Nano API dashboard](https:/app./nanoapi.io) and create a new API key.
+**Optional** The Nano API key to use for authentication. To get this, visit the [Nano API dashboard](https:/app./nanoapi.io) and create a new API key.

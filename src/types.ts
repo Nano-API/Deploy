@@ -1,5 +1,5 @@
 export type CreateBuildInput = {
-  repoId: string;
+  repoId: number;
   repoName: string;
   repoOwner: string;
   branch: string;
