@@ -4,7 +4,7 @@ export type CreateBuildInput = {
   repoOwner: string;
   branch: string;
   commitSHA: string;
-}
+};
 
 export type Build = {
   id: string;
@@ -18,12 +18,12 @@ export type Build = {
   userId: string;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export type BuildResponse = {
   url: string;
   build: Build;
-}
+};
 
 export type LogsResponse = {
   id: string;
@@ -33,7 +33,7 @@ export type LogsResponse = {
   status: string;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export const buildEndedStatuses = ['success', 'failed', 'canceled'];
 
