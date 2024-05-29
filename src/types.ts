@@ -2,7 +2,6 @@ export type CreateBuildInput = {
   repoId: number;
   repoName: string;
   repoOwner: string;
-  branch: string;
   commitSHA: string;
 };
 

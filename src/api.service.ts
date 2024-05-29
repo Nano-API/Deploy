@@ -23,7 +23,6 @@ export const getBuildInput = async (): Promise<CreateBuildInput> => {
 
   const repoName = context.repo.repo;
   const repoOwner = context.repo.owner;
-  const branch = context.ref.replace('refs/heads/', '');
   const commitSHA = context.sha;
 
   // Get the repo id via the octokit API
@@ -40,7 +39,6 @@ export const getBuildInput = async (): Promise<CreateBuildInput> => {
     repoId,
     repoName,
     repoOwner,
-    branch,
     commitSHA
   };
 };
@@ -50,13 +48,33 @@ export const createBuild = async (
 ): Promise<string> => {
   // Make the request to the Nano-API servers to start the build.
   const apiKey = core.getInput('api_key');
-  const response = await fetch(`${baseUrl}/api/v1/builds`, {
+  const response = await fetch(`https://api.test.nanoapi.io/build_api/v1/builds`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`
+      'X-API-Key': '4f0f3be2-c58c-428c-aa03-bfbbe60ebaa1'
     },
-    body: JSON.stringify(buildInput)
+    body: JSON.stringify({
+      planId: 1,
+      repositoryId: "787399436",
+      commitSHA: "c91079b835b0cc3ba550923a8c651c4aa0722fd5",
+      environmentVariables: [
+        {
+          key: "PORT",
+          value: "80"
+        },
+        {
+          key: "NODE_ENV",
+          value: "production"
+        }
+      ],
+      secretEnvironmentVariables: [
+        {
+          key: "SECRET",
+          value: "superdupersecret"
+        }
+      ]
+    })
   });
 
   if (!response.ok) {

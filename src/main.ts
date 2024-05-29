@@ -6,7 +6,7 @@ export const run = async (): Promise<void> => {
   try {
     const buildInput = await apiService.getBuildInput();
     core.info(
-      `Build prepared for ${buildInput.repoName}#${buildInput.branch} (${buildInput.commitSHA})`
+      `Build prepared for ${buildInput.repoName}(${buildInput.commitSHA})`
     );
   } catch (error: any) {
     core.error(error.message);

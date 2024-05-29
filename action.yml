@@ -5,9 +5,14 @@ inputs:
   api_key:
     description: 'API key for the org, obtained from the Nano API frontend'
     required: true
-  token:
-    description: 'Github token, specified via ${{ secrets.GITHUB_TOKEN }}'
+  envName:
+    description: 'Environment name to deploy to'
     required: true
+    default: 'dev'
+  buildEnvVars:
+    description: 'Environment variables to set for the deployed build'
+    required: false
+    type: object
 runs:
   using: 'node18'
   main: 'lib/index.js'
