@@ -13,6 +13,9 @@ inputs:
     description: 'Environment variables to set for the deployed build'
     required: false
     type: object
+  token:
+    description: 'GitHub token for the repository'
+    required: true
 runs:
   using: 'node20'
   main: 'lib/index.js'
