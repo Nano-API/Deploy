@@ -76,6 +76,7 @@ export const createBuild = async (
 
   if (!response.ok) {
     const error = await response.json();
+    core.info(`Got error from NanoAPI: ${JSON.stringify(error)}`)
     throw new BuildCreationError(error.message);
   }
 
