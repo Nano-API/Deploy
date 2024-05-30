@@ -47,25 +47,22 @@ export const createBuild = async (
   buildInput: CreateBuildInput
 ): Promise<string> => {
   // Make the request to the Nano-API servers to start the build.
-  const apiKey = core.getInput('api_key');
+  const apiKey = core.getInput('apiKey');
+  const planId = core.getInput('planId');
   const response = await fetch(`https://api.test.nanoapi.io/build_api/v1/builds`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-API-Key': '4f0f3be2-c58c-428c-aa03-bfbbe60ebaa1'
+      'X-API-Key': `${apiKey}`
     },
     body: JSON.stringify({
-      planId: 1,
-      repositoryId: "787399436",
-      commitSHA: "c91079b835b0cc3ba550923a8c651c4aa0722fd5",
+      planId: planId,
+      repositoryId: buildInput.repoId,
+      commitSHA: buildInput.commitSHA,
       environmentVariables: [
         {
           key: "PORT",
           value: "80"
-        },
-        {
-          key: "NODE_ENV",
-          value: "production"
         }
       ],
       secretEnvironmentVariables: [
@@ -83,7 +80,6 @@ export const createBuild = async (
   }
 
   const resJSON: BuildResponse = await response.json();
-  core.info(`Build started: ${resJSON.build.id}`);
   return resJSON.url;
 };
 

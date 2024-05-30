@@ -2,7 +2,7 @@ name: 'Nano API Build and Deploy Action'
 description: 'Builds a new version of the Nano API and deploys it to the org, streaming the build logs to the action output'
 author: 'Nano-API'
 inputs: 
-  api_key:
+  apiKey:
     description: 'API key for the org, obtained from the Nano API frontend'
     required: true
   envName:
@@ -16,6 +16,10 @@ inputs:
   token:
     description: 'GitHub token for the repository'
     required: true
+  planId:
+    description: 'Plan ID for the org, obtained from the Nano API frontend'
+    required: false
+    type: number
 runs:
   using: 'node20'
   main: 'lib/index.js'
