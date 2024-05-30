@@ -80,6 +80,7 @@ export const createBuild = async (
   }
 
   const resJSON: BuildResponse = await response.json();
+  core.info(`Got response from NanoAPI: ${JSON.stringify(resJSON)}`)
   return resJSON.url;
 };
 
