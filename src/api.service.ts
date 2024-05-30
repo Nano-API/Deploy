@@ -50,8 +50,8 @@ export const createBuild = async (
   const apiKey = core.getInput('apiKey');
   const planId = core.getInput('planId');
   const reqBody = {
-    planId: planId,
-    repositoryId: buildInput.repoId,
+    planId: parseInt(planId),
+    repositoryId: `${buildInput.repoId}`,
     commitSHA: buildInput.commitSHA,
     environmentVariables: [
       {

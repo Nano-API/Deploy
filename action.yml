@@ -19,7 +19,6 @@ inputs:
   planId:
     description: 'Plan ID for the org, obtained from the Nano API frontend'
     required: false
-    type: number
 runs:
   using: 'node20'
   main: 'lib/index.js'
