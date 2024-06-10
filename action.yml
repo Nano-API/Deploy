@@ -5,20 +5,17 @@ inputs:
   apiKey:
     description: 'API key for the org, obtained from the Nano API frontend'
     required: true
-  envName:
-    description: 'Environment name to deploy to'
+  buildConfigId:
+    description: 'ID for the build config, obtained from the Nano API frontend'
     required: true
-    default: 'dev'
-  buildEnvVars:
-    description: 'Environment variables to set for the deployed build'
-    required: false
-    type: object
-  token:
-    description: 'GitHub token for the repository'
+  commitSHA:
+    description: 'SHA of the commit to build'
     required: true
-  planId:
-    description: 'Plan ID for the org, obtained from the Nano API frontend'
+  streamLogs:
+    description: 'Whether to stream the build logs to the action output, defaults to true. The action will wait to complete until the build is finished if this is true. To save time, set this to false if you do not need the logs.'
     required: false
+    default: true
+    type: boolean
 runs:
   using: 'node20'
   main: 'lib/index.js'
