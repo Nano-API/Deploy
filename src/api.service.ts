@@ -18,7 +18,7 @@ export const createBuild = async (): Promise<BuildResponse> => {
   const reqBody = { buildConfigId, commitSHA };
   core.info(`Sending request to NanoAPI: ${JSON.stringify(reqBody)}`)
 
-  const response = await fetch(`https://api.test.nanoapi.io/build_api/v1/builds`, {
+  const response = await fetch(`https://api.prod.nanoapi.io/build_api/v1/builds`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

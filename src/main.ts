@@ -9,6 +9,7 @@ export const run = async (): Promise<void> => {
     if (streamLogs) {
       core.info(`Build started. Streaming logs...`);
       core.info('This can be disabled by setting the `streamLogs` input to false.');
+      await apiService.watchBuild(buildRes.id);
     }
   } catch (error: any) {
     core.error(error.message);
