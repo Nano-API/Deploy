@@ -23,7 +23,7 @@ jobs:
           # Build Config ID is retrieved from the NanoAPI frontend
           buildConfigId: 'your-build-config-id'
           # Commit SHA specifies the commit to build, this can also be a branch name 'main', etc.
-          commitSha: ${{ github.sha }}
+          commitSHA: ${{ github.sha }}
           # Optional: streamLogs will stream the build logs to the GitHub Actions console
           streamLogs: true
 ```
@@ -38,7 +38,7 @@ jobs:
 
 **Required** The build config ID to use for the build. This can be retrieved from the NanoAPI frontend. First, search for your repo in the NanoAPI dashboard, then click on the repo to view the build configs. The ID is the last part of the URL.
 
-### `commitSha`
+### `commitSHA`
 
 **Required** The commit SHA to build. This can also be a branch name, e.g. `main`, `feature/my-feature`, etc. This is typically injected by GitHub Actions as `${{ github.sha }}`.
 

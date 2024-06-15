@@ -1,4 +1,3 @@
-import { CreateBuildInput } from './types';
-export declare const getBuildInput: () => Promise<CreateBuildInput>;
-export declare const createBuild: (buildInput: CreateBuildInput) => Promise<string>;
-export declare const watchBuild: (path: string) => Promise<void>;
+import { BuildResponse } from './types';
+export declare const createBuild: () => Promise<BuildResponse>;
+export declare const watchBuild: (buildId: string) => Promise<void>;
