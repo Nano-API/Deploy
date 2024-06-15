@@ -64,10 +64,12 @@ export const watchBuild = async (buildId: string): Promise<void> => {
 
     resJSON = await response.json();
 
-    resJSON.forEach(log => {
-      core.info(log.data);
-      since = log.createdAt;
-    });
+    if (resJSON) {
+      resJSON.forEach(log => {
+        core.info(log.data);
+        since = log.createdAt;
+      });
+    }
     await new Promise(resolve => setTimeout(resolve, 2500));
   } while (!buildEndedStatuses.includes(resJSON[resJSON.length - 1].status));
 };
