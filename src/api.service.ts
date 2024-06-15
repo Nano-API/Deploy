@@ -44,6 +44,7 @@ export const watchBuild = async (buildId: string): Promise<void> => {
   const path = `/build_api/v1/logs/${buildId}`;
 
   let resJSON: LogsResponse[];
+  const pastResponses: LogsResponse[] = [];
   let since: string = '';
   let url: string;
   do {
@@ -69,7 +70,8 @@ export const watchBuild = async (buildId: string): Promise<void> => {
         core.info(log.data);
         since = log.createdAt;
       });
+      pastResponses.push(...resJSON);
     }
     await new Promise(resolve => setTimeout(resolve, 2500));
-  } while (!buildEndedStatuses.includes(resJSON[resJSON.length - 1].status));
+  } while (!buildEndedStatuses.includes(pastResponses[pastResponses.length - 1].status));
 };
