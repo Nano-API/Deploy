@@ -18,7 +18,7 @@ export const createBuild = async (): Promise<BuildResponse> => {
   const reqBody = { buildConfigId, commitSHA };
   core.info(`Sending request to NanoAPI: ${JSON.stringify(reqBody)}`)
 
-  const response = await fetch(`https://api.prod.nanoapi.io/build_api/v1/builds`, {
+  const response = await fetch(`${baseUrl}/build_api/v1/builds`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export const createBuild = async (): Promise<BuildResponse> => {
 // Query the api every 5 seconds until the build is complete.
 export const watchBuild = async (buildId: string): Promise<void> => {
   const apiKey = core.getInput('apiKey');
-  const path = `/api/v1/logs/${buildId}`;
+  const path = `/build_api/v1/logs/${buildId}`;
 
   let resJSON: LogsResponse[];
   let since: string = '';
@@ -53,7 +53,7 @@ export const watchBuild = async (buildId: string): Promise<void> => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`
+        'X-API-Key': `${apiKey}`
       }
     });
 
