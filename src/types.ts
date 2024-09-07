@@ -15,7 +15,7 @@ export type LogsResponse = {
   updatedAt: string;
 };
 
-export const buildEndedStatuses = ['success', 'failed', 'canceled'];
+export const buildEndedStatuses = ['failure', 'online', 'canceled'];
 
 export class BuildCreationError extends Error {
   constructor(message: string) {
