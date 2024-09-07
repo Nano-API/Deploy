@@ -1,79 +1,50 @@
-import * as github from '@actions/github';
 import * as core from '@actions/core';
 
 import {
   BuildCreationError,
   buildEndedStatuses,
   BuildResponse,
-  CreateBuildInput,
   LogsResponse,
   LogQueryError
 } from './types';
 
-const baseUrl = 'https://api.nanoapi.io';
+const baseUrl = 'https://api.prod.nanoapi.io';
 
-export const getBuildInput = async (): Promise<CreateBuildInput> => {
-  let buildInput: CreateBuildInput;
-
-  const token = core.getInput('token');
-  core.info('Using API key: *** and starting build...');
-
-  // Get github context data
-  const context = github.context;
-
-  const repoName = context.repo.repo;
-  const repoOwner = context.repo.owner;
-  const branch = context.ref.replace('refs/heads/', '');
-  const commitSHA = context.sha;
-
-  // Get the repo id via the octokit API
-  // @ts-ignore
-  const octokit = github.getOctokit(token);
-  const {data: repoData} = await octokit.rest.repos.get({
-    owner: repoOwner,
-    repo: repoName
-  });
-
-  const repoId = repoData.id;
-
-  return {
-    repoId,
-    repoName,
-    repoOwner,
-    branch,
-    commitSHA
-  };
-};
-
-export const createBuild = async (
-  buildInput: CreateBuildInput
-): Promise<string> => {
+export const createBuild = async (): Promise<BuildResponse> => {
   // Make the request to the Nano-API servers to start the build.
-  const apiKey = core.getInput('api_key');
-  const response = await fetch(`${baseUrl}/api/v1/builds`, {
+  const apiKey = core.getInput('apiKey');
+  const buildConfigId = core.getInput('buildConfigId');
+  const commitSHA = core.getInput('commitSHA');
+  const reqBody = { buildConfigId, commitSHA };
+  core.info(`Sending request to NanoAPI: ${JSON.stringify(reqBody)}`)
+
+  const response = await fetch(`${baseUrl}/build_api/v1/builds`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`
+      'X-API-Key': `${apiKey}`
     },
-    body: JSON.stringify(buildInput)
+    body: JSON.stringify(reqBody)
   });
 
   if (!response.ok) {
     const error = await response.json();
+    core.info(`Got error from NanoAPI: ${JSON.stringify(error)}`)
     throw new BuildCreationError(error.message);
   }
 
   const resJSON: BuildResponse = await response.json();
-  core.info(`Build started: ${resJSON.build.id}`);
-  return resJSON.url;
+  core.info(`Got response from NanoAPI: ${JSON.stringify(resJSON)}`)
+  return resJSON;
 };
 
 // Query the api every 5 seconds until the build is complete.
-export const watchBuild = async (path: string): Promise<void> => {
-  const apiKey = core.getInput('api_key');
+export const watchBuild = async (buildId: string): Promise<void> => {
+  const apiKey = core.getInput('apiKey');
+  const path = `/build_api/v1/logs/${buildId}`;
 
   let resJSON: LogsResponse[];
+  const pastResponses: LogsResponse[] = [];
   let since: string = '';
   let url: string;
   do {
@@ -83,7 +54,7 @@ export const watchBuild = async (path: string): Promise<void> => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`
+        'X-API-Key': `${apiKey}`
       }
     });
 
@@ -94,10 +65,13 @@ export const watchBuild = async (path: string): Promise<void> => {
 
     resJSON = await response.json();
 
-    resJSON.forEach(log => {
-      core.info(log.data);
-      since = log.createdAt;
-    });
-    await new Promise(resolve => setTimeout(resolve, 5000));
-  } while (!buildEndedStatuses.includes(resJSON[resJSON.length - 1].status));
+    if (resJSON) {
+      resJSON.forEach(log => {
+        core.info(log.data);
+        since = log.createdAt;
+      });
+      pastResponses.push(...resJSON);
+    }
+    await new Promise(resolve => setTimeout(resolve, 2500));
+  } while (!buildEndedStatuses.includes(pastResponses[pastResponses.length - 1].status));
 };

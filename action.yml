@@ -2,12 +2,20 @@ name: 'Nano API Build and Deploy Action'
 description: 'Builds a new version of the Nano API and deploys it to the org, streaming the build logs to the action output'
 author: 'Nano-API'
 inputs: 
-  api_key:
+  apiKey:
     description: 'API key for the org, obtained from the Nano API frontend'
     required: true
-  token:
-    description: 'Github token, specified via ${{ secrets.GITHUB_TOKEN }}'
+  buildConfigId:
+    description: 'ID for the build config, obtained from the Nano API frontend'
     required: true
+  commitSHA:
+    description: 'SHA of the commit to build'
+    required: true
+  streamLogs:
+    description: 'Whether to stream the build logs to the action output, defaults to true. The action will wait to complete until the build is finished if this is true. To save time, set this to false if you do not need the logs.'
+    required: false
+    default: true
+    type: boolean
 runs:
-  using: 'node18'
+  using: 'node20'
   main: 'lib/index.js'

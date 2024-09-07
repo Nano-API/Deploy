@@ -18,20 +18,33 @@ jobs:
       - name: Build Serverless functions and deploy via Nano API
         uses: Nano-API/Deploy@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           # Best practice is to store your API key as a secret
-          api_key: ${{ secrets.NANO_API_KEY }}
+          apiKey: ${{ secrets.NANO_API_KEY }}
+          # Build Config ID is retrieved from the NanoAPI frontend
+          buildConfigId: 'your-build-config-id'
+          # Commit SHA specifies the commit to build, this can also be a branch name 'main', etc.
+          commitSHA: ${{ github.sha }}
+          # Optional: streamLogs will stream the build logs to the GitHub Actions console
+          streamLogs: true
 ```
 
 ## Inputs
 
-### `token`
+### `apiKey`
 
-**Required** The GitHub token to use for authentication. We use this to load additional metadata on the repo that is using this action.
+**Required** The NanoAPI API key to use for authentication. To get this, visit the [Nano API dashboard](https://app.nanoapi.io) and create a new API key.
 
-### `api_key`
+### `buildConfigId`
 
-**Optional** The Nano API key to use for authentication. To get this, visit the [Nano API dashboard](https:/app./nanoapi.io) and create a new API key.
+**Required** The build config ID to use for the build. This can be retrieved from the NanoAPI frontend. First, search for your repo in the NanoAPI dashboard, then click on the repo to view the build configs. The ID is the last part of the URL.
+
+### `commitSHA`
+
+**Required** The commit SHA to build. This can also be a branch name, e.g. `main`, `feature/my-feature`, etc. This is typically injected by GitHub Actions as `${{ github.sha }}`.
+
+### `streamLogs`
+
+**Optional** Whether to stream the build logs to the GitHub Actions console. Default is `true`.
 
 # Developing
 

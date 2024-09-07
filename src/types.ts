@@ -1,28 +1,8 @@
-export type CreateBuildInput = {
-  repoId: number;
-  repoName: string;
-  repoOwner: string;
-  branch: string;
-  commitSHA: string;
-};
-
-export type Build = {
-  id: string;
-  repoId: string;
-  orgId: number;
-  status: string;
-  version: number;
-  commitSHA: string;
-  branch: string;
-  startedBy: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type BuildResponse = {
-  url: string;
-  build: Build;
+  id: string,
+  status: string,
+  createdAt: Date,
+  updatedAt: Date,
 };
 
 export type LogsResponse = {
@@ -35,7 +15,7 @@ export type LogsResponse = {
   updatedAt: string;
 };
 
-export const buildEndedStatuses = ['success', 'failed', 'canceled'];
+export const buildEndedStatuses = ['failure', 'online', 'canceled'];
 
 export class BuildCreationError extends Error {
   constructor(message: string) {
