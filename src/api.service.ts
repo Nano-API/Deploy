@@ -48,6 +48,8 @@ export const watchBuild = async (buildId: string): Promise<void> => {
   let since: string = '';
   let url: string;
   do {
+    await new Promise(resolve => setTimeout(resolve, 2500));
+
     url = since ? `${baseUrl}${path}?since=${since}` : `${baseUrl}${path}`;
 
     const response = await fetch(url, {
@@ -72,6 +74,5 @@ export const watchBuild = async (buildId: string): Promise<void> => {
       });
       pastResponses.push(...resJSON);
     }
-    await new Promise(resolve => setTimeout(resolve, 2500));
   } while (!buildEndedStatuses.includes(pastResponses[pastResponses.length - 1].status));
 };
