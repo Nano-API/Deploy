@@ -74,5 +74,7 @@ export const watchBuild = async (buildId: string): Promise<void> => {
       });
       pastResponses.push(...resJSON);
     }
+
+    console.log(11111111, pastResponses)
   } while (!buildEndedStatuses.includes(pastResponses[pastResponses.length - 1].status));
 };
