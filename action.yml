@@ -5,17 +5,9 @@ inputs:
   apiKey:
     description: 'API key for the org, obtained from the Nano API frontend'
     required: true
-  buildConfigId:
-    description: 'ID for the build config, obtained from the Nano API frontend'
+  stackName:
+    description: 'Name of the stack'
     required: true
-  commitSHA:
-    description: 'SHA of the commit to build'
-    required: true
-  streamLogs:
-    description: 'Whether to stream the build logs to the action output, defaults to true. The action will wait to complete until the build is finished if this is true. To save time, set this to false if you do not need the logs.'
-    required: false
-    default: true
-    type: boolean
 runs:
   using: 'node20'
   main: 'lib/index.js'
