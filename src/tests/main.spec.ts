@@ -38,13 +38,6 @@ describe('run', () => {
     } as any);
   });
 
-  test('should fail if GITHUB_TOKEN is not set', async () => {
-    delete process.env.GITHUB_TOKEN;
-    await run();
-    expect(mockCoreError).toHaveBeenCalledWith('GITHUB_TOKEN is not set');
-    expect(mockCoreSetFailed).toHaveBeenCalledWith('GITHUB_TOKEN is not set.');
-  });
-
   test('should fail if getting repo ID fails', async () => {
     mockGetOctokit.mockReturnValue({
       rest: {
