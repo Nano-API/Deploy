@@ -1,8 +1,47 @@
+export type Stack = {
+  id: string;
+  clusterId: string;
+  organizationId: number;
+  domain: string;
+  servicePort: number;
+  envs: Array<{
+    key: string;
+    value: string;
+  }>;
+  secrets: Array<{
+    key: string;
+    value: string;
+  }>;
+  livenessProbe: {
+    path: string;
+    periodSeconds: number;
+  };
+  readinessProbe: {
+    path: string;
+    periodSeconds: number;
+    failureThresholdSeconds: number;
+  };
+  startupProbe: {
+    path: string;
+    periodSeconds: number;
+    failureThresholdSeconds: number;
+  };
+  adapter: string;
+  scaleToZeroAfterInactivitySeconds: number;
+  hpaConfig: {
+    minReplicas: number;
+    maxReplicas: number;
+    metrics: Array<{
+      type: string;
+      metricName: string;
+      targetAverageValue: number;
+      targetAverageUtilization: number;
+    }>;
+  };
+};
+
 export type BuildResponse = {
-  id: string,
-  status: string,
-  createdAt: Date,
-  updatedAt: Date,
+  id: string;
 };
 
 export type LogsResponse = {

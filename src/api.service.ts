@@ -5,38 +5,49 @@ import {
   buildEndedStatuses,
   BuildResponse,
   LogsResponse,
-  LogQueryError
+  LogQueryError,
+  Stack
 } from './types';
 
 const baseUrl = 'https://api.prod.nanoapi.io';
 
-export const createBuild = async (): Promise<BuildResponse> => {
-  // Make the request to the Nano-API servers to start the build.
-  const apiKey = core.getInput('apiKey');
-  const buildConfigId = core.getInput('buildConfigId');
-  const commitSHA = core.getInput('commitSHA');
-  const reqBody = { buildConfigId, commitSHA };
-  core.info(`Sending request to NanoAPI: ${JSON.stringify(reqBody)}`)
+export async function createBuildV2FromStack(
+  stack: Stack,
+  repositoryId: Number,
+  commitSha: string,
+  token: string,
+  apiKey: string
+): Promise<BuildResponse> {
+  const body = {
+    repository: {
+      id: repositoryId,
+      commitSha: commitSha,
+      token: token,
+      provider: 'github'
+    },
+    stack: stack
+  };
+  core.info(`Sending request to NanoAPI: ${JSON.stringify(body)}`);
 
-  const response = await fetch(`${baseUrl}/build_api/v1/builds`, {
+  const response = await fetch(`${baseUrl}/build_api/v2/builds`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-API-Key': `${apiKey}`
     },
-    body: JSON.stringify(reqBody)
+    body: JSON.stringify(body)
   });
 
   if (!response.ok) {
     const error = await response.json();
-    core.info(`Got error from NanoAPI: ${JSON.stringify(error)}`)
+    core.info(`Got error from NanoAPI: ${JSON.stringify(error)}`);
     throw new BuildCreationError(error.message);
   }
 
   const resJSON: BuildResponse = await response.json();
-  core.info(`Got response from NanoAPI: ${JSON.stringify(resJSON)}`)
+  core.info(`Got response from NanoAPI: ${JSON.stringify(resJSON)}`);
   return resJSON;
-};
+}
 
 // Query the api every 5 seconds until the build is complete.
 export const watchBuild = async (buildId: string): Promise<void> => {
@@ -73,5 +84,7 @@ export const watchBuild = async (buildId: string): Promise<void> => {
       pastResponses.push(...resJSON);
     }
     await new Promise(resolve => setTimeout(resolve, 2500));
-  } while (!buildEndedStatuses.includes(pastResponses[pastResponses.length - 1].status));
+  } while (
+    !buildEndedStatuses.includes(pastResponses[pastResponses.length - 1].status)
+  );
 };
