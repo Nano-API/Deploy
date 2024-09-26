@@ -9,7 +9,7 @@ import {
   Stack
 } from './types';
 
-const baseUrl = 'https://api.prod.nanoapi.io';
+const baseUrl = 'https://api.test.nanoapi.io';
 
 export async function createBuildV2FromStack(
   stack: Stack,
