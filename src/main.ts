@@ -7,7 +7,13 @@ import {Stack} from './types';
 
 export const run = async (): Promise<void> => {
   const stackName = core.getInput('stackName');
-  const token = core.getInput('token');
+
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) {
+    core.error('GITHUB_TOKEN is not set');
+    core.setFailed('GITHUB_TOKEN is not set.');
+    return;
+  }
 
   let repoId: number;
   try {

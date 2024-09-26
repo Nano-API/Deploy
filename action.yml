@@ -8,9 +8,6 @@ inputs:
   stackName:
     description: 'Name of the stack'
     required: true
-  githubToken:
-    description: 'GitHub token for the repository'
-    required: true
 runs:
   using: 'node20'
   main: 'lib/index.js'
