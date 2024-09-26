@@ -20,7 +20,7 @@ export async function createBuildV2FromStack(
 ): Promise<BuildResponse> {
   const body = {
     repository: {
-      id: repositoryId,
+      id: repositoryId.toString(),
       commitSha: commitSha,
       token: token,
       provider: 'github'
